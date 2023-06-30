@@ -2,40 +2,40 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\BooksImport;
 use App\Models\BookRequest;
 use Illuminate\Http\Request;
+use App\Models\Request as BkRequest;
+use Illuminate\Support\Facades\Auth;
 
 class BookRequestController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        return view('request');
+        if(Auth::user()->user_type === "admin"){
+            $requests = BkRequest::orderByDesc('id')->paginate(50);
+        } else {
+            $requests = BkRequest::where('user_id', Auth::user()->id)->orderByDesc('id')->paginate(50);
+        }
+        return view('request', ['requests' => $requests]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        //
+//        dd($this->bookID($request->barcode));
+        BkRequest::updateOrCreate(
+            [
+                'user_id' => Auth()->user()->id,
+                'user_detail_id' => $this->userDetailID(Auth()->user()->id),
+                'book_id' => $this->bookID($request->barcode),
+                'req_date' => $request['date_t'],
+//                'status' => ,
+                'requested_created_by' => Auth()->user()->id,
+                'requested_updated_by' => Auth()->user()->id,
+            ]
+        );
+
+        return back()->with('success', 'Book Request was Successfully Saved!!');
     }
 
     /**

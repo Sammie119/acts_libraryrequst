@@ -34,7 +34,7 @@ use Illuminate\Support\Facades\Auth;
         ];
     }
 
-    function loadDiagnosisAll()
+    function loadTitleAll()
     {
         echo '
             <script type="text/javascript">
@@ -58,4 +58,42 @@ use Illuminate\Support\Facades\Auth;
                 }, 1000);
             </script>
         ';
+    }
+
+    function loadAuthorAll()
+    {
+        echo '
+                <script type="text/javascript">
+                    setTimeout(() => {
+                        var search = 1;
+
+                        $.ajax({
+                            type:"POST",
+                            url:"get-books-author",
+                            headers: {
+                                "X-CSRF-TOKEN": $(\'meta[name="csrf-token"]\').attr("content")
+                            },
+                            data: {
+                                search
+                                },
+                            success:function(data) {
+                                $("#booksAuthorSel").empty();
+                                $("#booksAuthorSel").html(data);
+                            }
+                        });
+                    }, 1000);
+                </script>
+            ';
+    }
+
+    function status($num)
+    {
+        return match ($num) {
+            0 => 'Cancelled',
+            1 => 'Pending Approval',
+            2 => 'Request Approved',
+            3 => 'Book Returned',
+            default => "No Status",
+        };
+
     }

@@ -27,35 +27,45 @@
                     <thead>
                     <tr>
                         <th>#</th>
-                        <th>Name</th>
-                        <th>User Type</th>
-                        <th>Email</th>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>Status</th>
+                        <th>RQ Date</th>
+                        <th>Days</th>
+                        <th>RT Date</th>
                         <th>Action</th>
                     </tr>
                     </thead>
                     <tbody id="employee_table">
-{{--                    @forelse ($users as $key => $user)--}}
-{{--                        <tr>--}}
-{{--                            <td>{{ ++$key }}</td>--}}
-{{--                            <td>{{ $user->name }}</td>--}}
-{{--                            <td>{{ ucfirst($user->user_type) }}</td>--}}
-{{--                            <td>{{ $user->email }}</td>--}}
-{{--                            <td>--}}
-{{--                                <div class="btn-group">--}}
-{{--                                    <button class="btn btn-success btn-sm edit" value="{{ $user->id }}" data-bs-target="#getModal" data-bs-toggle="modal" title="Edit Details">Edit</button>--}}
-{{--                                    <button class="btn btn-danger btn-sm delete" value="{{ $user->id }}" data-bs-toggle="modal" data-bs-target="#comfirm-delete" role="button">Del</button>--}}
-{{--                                </div>--}}
-{{--                            </td>--}}
-{{--                        </tr>--}}
-{{--                    @empty--}}
-{{--                        <tr>--}}
-{{--                            <td colspan="25">No Data Found</td>--}}
-{{--                        </tr>--}}
-{{--                    @endforelse--}}
+                    @forelse ($requests as $key => $request)
+                        <tr>
+                            <td>{{ $key+ $requests->firstItem() }}</td>
+                            <td>{{ $request->book->title ? $request->book->title : 'No Title' }}</td>
+                            <td>{{ $request->book->author ? $request->book->author : 'No Author' }}</td>
+                            <td>{{ $request->status ? status($request->status) : 'No Status' }}</td>
+                            <td>{{ $request->req_date ? $request->req_date : 'No Date' }}</td>
+                            <td>{{ _("-") }}</td>
+                            <td>{{ _("-") }}</td>
+                            <td>
+                                <div class="btn-group">
+                                    @if(Auth()->user()->user_type === 'admin')
+                                        <button class="btn btn-info btn-sm approve" value="{{ $request->id }}" data-bs-target="#getModal" data-bs-toggle="modal" title="Approve">Approve</button>
+                                    @endif
+                                    <button class="btn btn-success btn-sm edit" value="{{ $request->id }}" data-bs-target="#getModal" data-bs-toggle="modal" title="Edit Details">Edit</button>
+                                    <button class="btn btn-danger btn-sm delete" value="{{ $request->id }}" data-bs-toggle="modal" data-bs-target="#comfirm-delete" role="button">Del</button>
+                                </div>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="25">No Data Found</td>
+                        </tr>
+                    @endforelse
 
                     </tbody>
                 </table>
             </div>
+            <div class="row">{{ $requests->links() }}</div>
         </div>
     </div>
     @include('modals.medium-modal')
@@ -87,8 +97,33 @@
                     });
                 }
 
-                $('#editModal').on('shown.bs.modal', function () {
+                $('#getModal').on('shown.bs.modal', function () {
 
+                    $(document).on('change', '.book', function(){
+                        var search = $(this).val();
+                        // alert(search);
+                        $.ajax({
+                            type:"POST",
+                            url:"get-books-details",
+                            headers: {
+                                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
+                            },
+                            data: {
+                                search
+                            },
+                            success:function(data) {
+                                if(data.barcode == 'none'){
+                                    alert('Book does not Exist!!!');
+                                } else {
+                                    $("#barcode").val(data.barcode ? data.barcode : 'No Barcode');
+                                    $("#isbn").val(data.isbn ? data.isbn : 'No ISBN');
+                                    $('#author').val(data.author ? data.author : 'No Author');
+                                    $('#title').val(data.title ? data.title : 'No Title');
+                                }
+
+                            }
+                        });
+                    });
                 });
 
                 $(document).on('click', '.create', function(){
@@ -104,6 +139,17 @@
 
                 $(document).on('click', '.edit', function(){
                     $('.modal-title').text('Edit Book Request');
+
+                    var editModal=$(this).val();
+                    $.get('edit-modal/edit_request/'+editModal, function(result) {
+
+                        $(".modal-body").html(result);
+
+                    })
+                });
+
+                $(document).on('click', '.approve', function(){
+                    $('.modal-title').text('Approve Book Request');
 
                     var editModal=$(this).val();
                     $.get('edit-modal/edit_request/'+editModal, function(result) {

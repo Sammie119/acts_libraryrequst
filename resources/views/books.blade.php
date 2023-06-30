@@ -39,7 +39,7 @@
                     <tbody id="employee_table">
                     @forelse ($books as $key => $book)
                         <tr>
-                            <td>{{ ++$key }}</td>
+                            <td>{{ $key+ $books->firstItem() }}</td>
                             <td>{{ $book->barcode }}</td>
                             <td>{{ $book->title }}</td>
                             <td>{{ $book->author }}</td>

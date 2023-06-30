@@ -1,5 +1,10 @@
-{{ loadDiagnosisAll() }}
+{{ loadTitleAll() }}
 <datalist id="booksSel">
+
+</datalist>
+
+{{ loadAuthorAll() }}
+<datalist id="booksAuthorSel">
 
 </datalist>
 <div class="card-body">
@@ -15,7 +20,7 @@
             <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Title') }}</label>
 
             <div class="col-md-6">
-                <input id="name" type="text" class="form-control" list="booksSel" name="name" value="{{ isset($user->id) ? $user->name : old('name') }}" required autocomplete="name" autofocus>
+                <input id="title" type="text" class="form-control book" list="booksSel" name="title" value="{{ isset($user->id) ? $user->name : old('name') }}" required autofocus>
 
             </div>
         </div>
@@ -24,7 +29,7 @@
             <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Author') }}</label>
 
             <div class="col-md-6">
-                <input id="name" type="text" class="form-control" name="name" value="{{ isset($user->id) ? $user->name : old('name') }}" required autocomplete="name" autofocus>
+                <input id="author" type="text" class="form-control book" name="author" list="booksAuthorSel" value="{{ isset($user->id) ? $user->name : old('name') }}" required>
 
             </div>
         </div>
@@ -33,7 +38,7 @@
             <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Barcode') }}</label>
 
             <div class="col-md-6">
-                <input id="name" type="text" class="form-control" name="name" value="{{ isset($user->id) ? $user->name : old('name') }}" required autocomplete="name" autofocus>
+                <input id="barcode" type="text" class="form-control" name="barcode" value="{{ isset($user->id) ? $user->name : old('name') }}" readonly>
 
             </div>
         </div>
@@ -42,7 +47,7 @@
             <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('ISBN') }}</label>
 
             <div class="col-md-6">
-                <input id="name" type="text" class="form-control" name="name" value="{{ isset($user->id) ? $user->name : old('name') }}" required autocomplete="name" autofocus>
+                <input id="isbn" type="text" class="form-control" name="isbn" value="{{ isset($user->id) ? $user->name : old('name') }}" readonly>
             </div>
         </div>
 
@@ -50,7 +55,7 @@
             <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Date') }}</label>
 
             <div class="col-md-6">
-                <input id="name" type="text" class="form-control" name="name" value="{{ isset($user->id) ? $user->name : old('name') }}" required autocomplete="name" autofocus>
+                <input id="date_t" type="date" class="form-control" name="date_t" value="<?php echo date('Y-m-d'); ?>" required>
             </div>
         </div>
 

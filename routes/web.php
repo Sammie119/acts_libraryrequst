@@ -85,7 +85,9 @@ Route::middleware(['auth'])->group(function () {
     });
 
     Route::controller(GetAjaxController::class)->group(function (){
-        Route::post('/get-books-title', 'getBooksDataList');
+        Route::post('/get-books-title', 'getBooksTitleList');
+        Route::post('/get-books-author', 'getBooksAuthorList');
+        Route::post('/get-books-details', 'getBooksDetail');
     });
 
 });
