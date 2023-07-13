@@ -46,7 +46,7 @@
                                 <a class="nav-link text-white {{ request()->is('home') ? 'active' : '' }}" href="{{ url('home') }}">{{ __('Home') }}</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-white {{ request()->is('request') ? 'active' : '' }}" href="{{ url('requests') }}">{{ __('Request') }}</a>
+                                <a class="nav-link text-white {{ request()->is('requests') ? 'active' : '' }}" href="{{ url('requests') }}">{{ __('Request') }}</a>
                             </li>
 {{--                            <li class="nav-item">--}}
 {{--                                <a class="nav-link text-white" href="#">{{ __('History') }}</a>--}}
@@ -147,7 +147,7 @@
                     "closeButton" : true,
                     "progressBar" : true
                 }
-            toastr.success("{!! Session::get('error') !!}");
+            toastr.error("{!! Session::get('error') !!}");
         </script>
    @endif
 

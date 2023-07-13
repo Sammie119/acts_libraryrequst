@@ -4,7 +4,9 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Laravel</title>
+        <title>{{ config('app.name', 'Laravel') }}</title>
+
+        <link rel="shortcut icon" href="{{ asset('public/assets/images/smmie_logo.ico') }}" type="image/ico">
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
@@ -21,11 +23,14 @@
 
             a {
                 font-weight: bold;
+                color: black;
             }
+
+
         </style>
     </head>
     <body class="antialiased">
-        <div class="relative flex items-top justify-center min-h-screen bg-gray-100 dark:bg-gray-900 sm:items-center py-4 sm:pt-0">
+        <div class="relative flex items-top justify-center min-h-screen bg-gray-100 sm:items-center py-4 sm:pt-0">
             @if (Route::has('login'))
                 <div class="hidden fixed top-0 right-0 px-6 py-4 sm:block">
                     @auth
@@ -41,19 +46,19 @@
             @endif
 
             <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
-                <div class="flex justify-center pt-8 sm:justify-start sm:pt-0">
+                <div class="flex justify-center mx-auto sm:pt-0">
                     
-                    
-                    <h1>Apostolic Church Theological Seminary</h1>
-                </div>
-
-                <div class="mt-8 bg-white dark:bg-gray-800 overflow-hidden shadow sm:rounded-lg">
+                    <img src="{{ asset('public/assets/images/acts_logo_transparent.jpg')}}" width="150">
                     
                 </div>
 
-                <div class="flex justify-center mt-4 sm:items-center sm:justify-between">
-                    
+                <div class="flex justify-center mx-auto sm:pt-0">
+                    <h1>Apostolic Church Theological Seminary Library</h1>
                 </div>
+
+                {{-- <div class="flex justify-center mx-auto sm:pt-0">
+                    <h2>ACTS </h2>
+                </div> --}}
             </div>
         </div>
     </body>

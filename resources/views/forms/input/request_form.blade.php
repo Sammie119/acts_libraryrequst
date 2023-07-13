@@ -14,13 +14,16 @@
 
         @isset($request->id)
             <input type="hidden" value="{{ $request->id }}" name="id">
+            @php
+                $book = getBook($request->book_barcode);    
+            @endphp
         @endisset
-
+    
         <div class="row mb-3">
             <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Title') }}</label>
 
             <div class="col-md-6">
-                <input id="title" type="text" class="form-control book" list="booksSel" name="title" value="{{ isset($user->id) ? $user->name : old('name') }}" required autofocus>
+                <input id="title" type="text" class="form-control book" list="booksSel" name="title" value="{{ isset($request->id) ? $book->title : old('title') }}" required autofocus>
 
             </div>
         </div>
@@ -29,7 +32,7 @@
             <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Author') }}</label>
 
             <div class="col-md-6">
-                <input id="author" type="text" class="form-control book" name="author" list="booksAuthorSel" value="{{ isset($user->id) ? $user->name : old('name') }}" required>
+                <input id="author" type="text" class="form-control book" name="author" list="booksAuthorSel" value="{{ isset($request->id) ? $book->author : old('author') }}" required>
 
             </div>
         </div>
@@ -38,7 +41,7 @@
             <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Barcode') }}</label>
 
             <div class="col-md-6">
-                <input id="barcode" type="text" class="form-control" name="barcode" value="{{ isset($user->id) ? $user->name : old('name') }}" readonly>
+                <input id="barcode" type="text" class="form-control" name="barcode" value="{{ isset($request->id) ? $book->barcode : old('barcode') }}" readonly>
 
             </div>
         </div>
@@ -47,7 +50,7 @@
             <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('ISBN') }}</label>
 
             <div class="col-md-6">
-                <input id="isbn" type="text" class="form-control" name="isbn" value="{{ isset($user->id) ? $user->name : old('name') }}" readonly>
+                <input id="isbn" type="text" class="form-control" name="isbn" value="{{ isset($request->id) ? explode(" ", $book->isbn)[0] : old('name') }}" readonly>
             </div>
         </div>
 
@@ -55,7 +58,7 @@
             <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Date') }}</label>
 
             <div class="col-md-6">
-                <input id="date_t" type="date" class="form-control" name="date_t" value="<?php echo date('Y-m-d'); ?>" required>
+                <input id="date_t" type="date" class="form-control" name="date_t" value="<?php echo isset($request->id) ? $request->req_date : date('Y-m-d'); ?>" required>
             </div>
         </div>
 

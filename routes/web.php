@@ -47,6 +47,10 @@ Route::middleware(['auth'])->group(function () {
         Route::post('store_request', 'store')->name('store_request');
         Route::post('edit_request/{id}', 'update')->name('edit_request');
         Route::get('delete_request/{id}', 'destroy')->name('delete_request');
+
+        Route::post('approved/{id}', 'store_approve')->name('approved');
+        Route::get('r_cancelled/{id}', 'cancelRequest')->name('r_cancelled');
+        Route::get('returned_book/{id}', 'bookReturned')->name('returned_book');
     });
 
     Route::controller(UserController::class)->group(function () {

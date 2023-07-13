@@ -1,5 +1,11 @@
 @extends('layouts.app')
 
+<style>
+    .sambtn {
+        pointer-events: none;
+    }
+</style>
+
 @section('content')
     <div class="container-fluid px-4">
         <h1 class="mt-1">Requests</h1>
@@ -29,10 +35,10 @@
                         <th>#</th>
                         <th>Title</th>
                         <th>Author</th>
-                        <th>Status</th>
                         <th>RQ Date</th>
                         <th>Days</th>
                         <th>RT Date</th>
+                        <th>Status</th>
                         <th>Action</th>
                     </tr>
                     </thead>
@@ -42,14 +48,23 @@
                             <td>{{ $key+ $requests->firstItem() }}</td>
                             <td>{{ $request->book->title ? $request->book->title : 'No Title' }}</td>
                             <td>{{ $request->book->author ? $request->book->author : 'No Author' }}</td>
-                            <td>{{ $request->status ? status($request->status) : 'No Status' }}</td>
                             <td>{{ $request->req_date ? $request->req_date : 'No Date' }}</td>
-                            <td>{{ _("-") }}</td>
-                            <td>{{ _("-") }}</td>
+                            <td>{{ $request->date_to_return ? getDaysDiff(now(), $request->date_to_return) : _("-") }}</td>
+                            <td>{{ $request->date_to_return ? $request->date_to_return : _("-") }}</td>
+                            <td><button class="sambtn btn <?php echo match ($request->status) {
+                                    0 => 'btn-danger',
+                                    1 => 'btn-secondary',
+                                    2 => 'btn-success',
+                                    3 => 'btn-dark'} 
+                                ?> btn-sm">{{ status($request->status) }}</button></td>
                             <td>
                                 <div class="btn-group">
                                     @if(Auth()->user()->user_type === 'admin')
-                                        <button class="btn btn-info btn-sm approve" value="{{ $request->id }}" data-bs-target="#getModal" data-bs-toggle="modal" title="Approve">Approve</button>
+                                        @if($request->status === 1)
+                                            <button class="btn btn-info btn-sm approve" value="{{ $request->id }}" data-bs-target="#getModal" data-bs-toggle="modal" title="Approve">Approve</button> 
+                                        @elseif($request->status === 2)
+                                            <button class="btn btn-warning btn-sm returned" value="{{ $request->id }}" data-bs-target="#comfirm-delete" data-bs-toggle="modal" title="Approve">Received</button>   
+                                        @endif
                                     @endif
                                     <button class="btn btn-success btn-sm edit" value="{{ $request->id }}" data-bs-target="#getModal" data-bs-toggle="modal" title="Edit Details">Edit</button>
                                     <button class="btn btn-danger btn-sm delete" value="{{ $request->id }}" data-bs-toggle="modal" data-bs-target="#comfirm-delete" role="button">Del</button>
@@ -152,7 +167,7 @@
                     $('.modal-title').text('Approve Book Request');
 
                     var editModal=$(this).val();
-                    $.get('edit-modal/edit_request/'+editModal, function(result) {
+                    $.get('edit-modal/approve_request/'+editModal, function(result) {
 
                         $(".modal-body").html(result);
 
@@ -170,6 +185,27 @@
                     })
                 });
 
+                $(document).on('click', '.cancel', function(){
+                    $('.modal-title').text('Cancel Confirmation');
+
+                    var id=$(this).val();
+                    $.get('delete-modal/cancel_request/'+id, function(result) {
+
+                        $(".modal-body").html(result);
+
+                    })
+                });
+
+                $(document).on('click', '.returned', function(){
+                    $('.modal-title').text('Book Received Confirmation');
+
+                    var id=$(this).val();
+                    $.get('delete-modal/returned_request/'+id, function(result) {
+
+                        $(".modal-body").html(result);
+
+                    })
+                });
             };
 
         </script>

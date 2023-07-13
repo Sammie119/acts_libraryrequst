@@ -11,4 +11,9 @@ class BookRequest extends Model
     use HasFactory, SoftDeletes;
 
     protected $guarded = [];
+
+    public function book()
+    {
+        return $this->belongsTo('App\Models\Book','book_barcode', 'barcode');
+    }
 }

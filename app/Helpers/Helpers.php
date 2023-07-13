@@ -90,10 +90,26 @@ use Illuminate\Support\Facades\Auth;
     {
         return match ($num) {
             0 => 'Cancelled',
-            1 => 'Pending Approval',
-            2 => 'Request Approved',
-            3 => 'Book Returned',
+            1 => 'Pending',
+            2 => 'Approved',
+            3 => 'Returned',
             default => "No Status",
         };
 
+    }
+
+    function getBook($barcode)
+    {
+        return Book::where('barcode', $barcode)->first();
+    }
+
+    function getDaysDiff($older_date, $current_date)
+    {
+        $date_diff = strtotime($current_date) - strtotime($older_date);
+
+        if(round($date_diff / (60 * 60 * 24)) >= 1){
+            return round($date_diff / (60 * 60 * 24));
+        }
+
+        return 0;
     }
